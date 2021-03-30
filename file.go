@@ -22,14 +22,17 @@ func (f *FileData) ReadFile(path *os.File) FileData {
 
 func WriteToFile(data string, f FileData, w bool, path *os.File) {
 	if w {
-		d := f.filedata
+		x := f.ReadFile(path)
+		d := x.filedata
 		d = append(d, data)
-		for _, v := range d {
-			_, err := fmt.Fprintln(path, v)
-			CheckError(err)
+		for i, v := range d {
+			if (i + 1) == len(d) {
+				_, err := fmt.Fprintln(path, v)
+				CheckError(err)
+			}
 		}
 	} else {
-		_, err := fmt.Fprintln(path, data)
+		err := os.WriteFile(path.Name(), []byte(data), 0644)
 		CheckError(err)
 	}
 }
