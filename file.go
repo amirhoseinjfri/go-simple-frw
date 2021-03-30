@@ -24,7 +24,7 @@ func (f *FileData) ReadFile(path *os.File) FileData {
 //Data as String To write to file , f as Typed filedata
 //W : if true it will write to the end of file
 //if false it will change whole file to the data you typed
-//path as string "Just The file name and format like : hi.txt"
+//path as os.openfile
 func WriteToFile(data string, f FileData, w bool, path *os.File) {
 	if w {
 		x := f.ReadFile(path)
