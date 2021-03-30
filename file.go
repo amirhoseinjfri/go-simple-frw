@@ -12,13 +12,8 @@ type FileData struct {
 }
 
 //just the file path as string and return data as array
-func (f *FileData) ReadFile(path string) FileData {
-
-	file, err := os.OpenFile(path, os.O_CREATE, os.ModePerm)
-	CheckError(err)
-	defer file.Close()
-
-	bio_scanner := bufio.NewScanner(file)
+func (f *FileData) ReadFile(path *os.File) FileData {
+	bio_scanner := bufio.NewScanner(path)
 	for bio_scanner.Scan() {
 		data := bio_scanner.Text()
 		f.filedata = append(f.filedata, data)
@@ -30,24 +25,19 @@ func (f *FileData) ReadFile(path string) FileData {
 //W : if true it will write to the end of file
 //if false it will change whole file to the data you typed
 //path as string "Just The file name and format like : hi.txt"
-func WriteToFile(data string, f FileData, w bool, path string) {
-
-	file, err := os.OpenFile(path, os.O_CREATE, os.ModePerm)
-	CheckError(err)
-	defer file.Close()
-
+func WriteToFile(data string, f FileData, w bool, path *os.File) {
 	if w {
 		x := f.ReadFile(path)
 		d := x.filedata
 		d = append(d, data)
 		for i, v := range d {
 			if (i + 1) == len(d) {
-				_, err := fmt.Fprintln(file, v)
+				_, err := fmt.Fprintln(path, v)
 				CheckError(err)
 			}
 		}
 	} else {
-		err := os.WriteFile(file.Name(), []byte(data), 0644)
+		err := os.WriteFile(path.Name(), []byte(data), 0644)
 		CheckError(err)
 	}
 }
