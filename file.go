@@ -11,6 +11,7 @@ type FileData struct {
 	filedata []string
 }
 
+//just the file path as string and return data as array
 func (f *FileData) ReadFile(path string) FileData {
 
 	file, err := os.OpenFile(path, os.O_CREATE, os.ModePerm)
