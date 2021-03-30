@@ -1,7 +1,19 @@
 package go_simple_frw
 
-import "os"
+import (
+	"bufio"
+	"os"
+)
 
-func ReadFile(path *os.File) {
+type FileData struct {
+	filedata []string
+}
 
+func (f *FileData) ReadFile(path *os.File) FileData {
+	bio_scanner := bufio.NewScanner(path)
+	for bio_scanner.Scan() {
+		data := bio_scanner.Text()
+		*&f.filedata = append(*&f.filedata, data)
+	}
+	return *f
 }
