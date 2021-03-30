@@ -20,10 +20,15 @@ func (f *FileData) ReadFile(path *os.File) FileData {
 }
 
 func WriteToFile(data string, f FileData, w bool, path *os.File) {
+	b := bufio.NewWriter(path)
 	if w {
-
+		d := f.filedata
+		d = append(d, data)
+		for _, v := range d {
+			_, err := b.WriteString(v)
+			CheckError(err)
+		}
 	} else {
-		b := bufio.NewWriter(path)
 		_, err := b.WriteString(data)
 		CheckError(err)
 	}
